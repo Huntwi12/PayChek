@@ -1,4 +1,6 @@
 from datetime import datetime
+import pandas as pd
+
 def add_bill(bill_data):
     frequency = input("Does this charge occur Daily, Weekly, Bi-Weekly, 1M, 3M, 6M, or 1Y? ")
     
@@ -8,7 +10,8 @@ def add_bill(bill_data):
     merchant = input("Enter Merchant: ")
     amount = float(input("Enter Amount: "))
 
-    bill_data = bill_data.append({'Date': date, 'Merchant': merchant, 'Amount': amount, 'Frequency': frequency}, ignore_index=True)
+    bill_data = pd.concat([bill_data, pd.DataFrame([{'Date': date, 'Merchant': merchant, 'Amount': amount, 'Frequency': frequency}])], ignore_index=True)
+
     return bill_data
 
 def edit_bill(bill_data):
@@ -17,8 +20,7 @@ def edit_bill(bill_data):
     row_to_edit = int(input("Enter row number (starting from 0): "))
     
     if 0 <= row_to_edit < len(bill_data):
-        # Logic to edit the bill
-        pass  # Implement the edit logic
+        pass 
     else:
         print("Invalid row number.")
     

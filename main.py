@@ -23,7 +23,6 @@ def main():
         payday_day = get_user_input("What day of the week is your payday? ")
         payday_frequency = get_user_input("Is your payday Weekly, Bi-Weekly, or Monthly? ").strip().lower()
         
-        # Add payday information to the DataFrame
         Bill['Payday Day'] = payday_day
         Bill['Payday Frequency'] = payday_frequency
 
@@ -45,22 +44,19 @@ def main():
             else:
                 print("Invalid action. Please choose 'add', 'edit', 'delete', or 'exit'.")
 
-    # Check if payday information is available
     if 'Payday Day' in Bill and not Bill['Payday Day'].isnull().all():
         payday_day = Bill['Payday Day'].iloc[0]
         payday_frequency = Bill['Payday Frequency'].iloc[0]
         next_payday = calculate_next_payday(payday_day, payday_frequency)
 
-        # Ensure the 'Date' column is in datetime format
         Bill['Date'] = pd.to_datetime(Bill['Date'], errors='coerce')
 
-        # Calculate total bills due until the next payday
         upcoming_bills = Bill[(Bill['Date'] >= datetime.now()) & (Bill['Date'] <= next_payday)]
         total_bills = total_bills_due(upcoming_bills) if not upcoming_bills.empty else 0
 
         remaining_days = (next_payday - datetime.now()).days
         print(f"There are {remaining_days} days left until your next payday.")
-        print(f"Total bills until next payday: ${total_bills:.2f}")
+        
 
         today = datetime.now()
         end_date = today + timedelta(days=7)
@@ -68,7 +64,8 @@ def main():
 
         print("\nUpcoming Bills for the Next 7 Days:")
         if not upcoming_bills_7_days.empty:
-            print(upcoming_bills_7_days)
+            print(upcoming_bills_7_days[['Date', 'Merchant', 'Amount']])
+            print(f"Total bills until next payday: ${total_bills:.2f}")
             print(f"Total amount due for upcoming bills in the next 7 days: ${total_bills_due(upcoming_bills_7_days):.2f}")
         else:
             print("No upcoming bills in the next 7 days.")
