@@ -10,7 +10,6 @@ def get_user_input(prompt: str) -> str:
     return input(prompt)
 
 def main():
-    print(os.listdir())
     name = get_user_input("What Is Your Name: ")
     file_name = f"{name}.csv"
     
